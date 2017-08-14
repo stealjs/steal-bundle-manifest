@@ -16,7 +16,9 @@ The main export is a constructor function. Instantiating it will give you an obj
 var BundleManifest = require("steal-bundle-manifest");
 var spdy = require("spdy");
 
-var manifest = new BundleManifest();
+var manifest = new BundleManifest({
+  serverRoot: "/assets"
+});
 
 
 spdy.createServer({
@@ -37,12 +39,12 @@ spdy.createServer({
     res.end(`
       <html>
         <head>
-          ${route.toHTML(styles)}
+          ${styles.toHTML()}
         </head>
         <body>
           <h1>Orders page</h1>
 
-          ${route.toHTML(scripts)}
+          ${scripts.toHTML()}
         </body>
       </html>
     `);

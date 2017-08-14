@@ -55,6 +55,52 @@ spdy.createServer({
 });
 ```
 
+## API
+
+### BundleManifest
+
+A **BundleManifest** is a type that represents a bundle manifest file. Upon instantiation you can provide a single argument *manifestOptions* to specify where files are located.
+
+#### manifestOptions
+
+An object including the following properties:
+
+##### manifest
+
+Specify the location of the manifest file. If not provided then `process.cwd() + "/dist/bundles.json"` is assumed.
+
+```js
+var manifest = new BundleManifest({
+  manifest: __dirname + "public/bundles.json"
+});
+```
+
+##### root
+
+Specify the root location from where to find the files listed in the bundle manifest.
+
+```js
+var manifest = new BundleManifest({
+  root: __dirname + "/public"
+});
+```
+
+##### serverRoot
+
+Specify the server's root, from where it should look for resources. This will influence how assets are written out when using the toHTML() API.
+
+```js
+var manifest = new BundleManifest({
+  serverRoot: "/assets"
+});
+```
+
+Will cause scripts to be written like:
+
+```html
+<script src="/assets/dist/bundles/app/app.js"></script>
+```
+
 ## License
 
 MIT

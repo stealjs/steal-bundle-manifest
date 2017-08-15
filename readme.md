@@ -20,7 +20,6 @@ var manifest = new BundleManifest({
   serverRoot: "/assets"
 });
 
-
 spdy.createServer({
   cert: ...,
   key: ...,
@@ -134,6 +133,34 @@ var styles = route.assets.filter(a => a.type === "style");
 #### push
 
 A function which, given a Node.js request and response, will send PUSH messages when using HTTP/2, and add [Preload](https://w3c.github.io/preload/#h-link-element-extensions) link headers when using HTTP/1.
+
+This can be used *instead of* [steal-push](https://github.com/stealjs/steal-push). A typical usage with [Express](https://expressjs.com/) looks like:
+
+```js
+const spdy = require("spdy");
+const express = require("express");
+const BundleManifest = require("bundle-manifest");
+
+const manifest = new BundleManifest();
+
+app.get("/",
+	manifest.for("main").push,
+	function(req, res){
+		...
+	});
+
+app.get("/orders",
+	manifest.for("orders/").push,
+	function(req, res){
+		...
+	});
+
+spdy.createServer({
+	key: ...,
+	cert: ...,
+	protocols: ["h2", "http/1.1"]
+}, app).listen(8080);
+```
 
 #### toHTML
 

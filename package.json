@@ -1,6 +1,6 @@
 {
   "name": "steal-bundle-manifest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bundle manifest tools for steal",
   "main": "index.js",
   "scripts": {

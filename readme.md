@@ -1,5 +1,8 @@
 # steal-bundle-manifest
 
+[![Build Status](https://travis-ci.org/stealjs/steal-bundle-manifest.svg?branch=master)](https://travis-ci.org/stealjs/steal-bundle-manifest)
+[![npm version](https://badge.fury.io/js/steal-bundle-manifest.svg)](http://badge.fury.io/js/steal-bundle-manifest)
+
 **steal-bundle-manifest** is a set of tools that help with working on bundle manifest files; these are files that specify a list of assets associated with a given route. In steal, these *routes* are keyed as module names.
 
 ## Install

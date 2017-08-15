@@ -20,7 +20,6 @@ var manifest = new BundleManifest({
   serverRoot: "/assets"
 });
 
-
 spdy.createServer({
   cert: ...,
   key: ...,
@@ -39,12 +38,12 @@ spdy.createServer({
     res.end(`
       <html>
         <head>
-          ${styles.toHTML()}
+          ${route.toHTML(styles)}
         </head>
         <body>
           <h1>Orders page</h1>
 
-          ${scripts.toHTML()}
+          ${route.toHTML(scripts)}
         </body>
       </html>
     `);
@@ -131,25 +130,37 @@ var scripts = route.assets.filter(a => a.type === "script");
 var styles = route.assets.filter(a => a.type === "style");
 ```
 
-These arrays are a special type, **Assets**, and have the methods as listed below.
-
 #### push
 
 A function which, given a Node.js request and response, will send PUSH messages when using HTTP/2, and add [Preload](https://w3c.github.io/preload/#h-link-element-extensions) link headers when using HTTP/1.
 
-### Assets
+This can be used *instead of* [steal-push](https://github.com/stealjs/steal-push). A typical usage with [Express](https://expressjs.com/) looks like:
 
-**Assets** is a subclass of Array, containing rows that look like:
+```js
+const spdy = require("spdy");
+const express = require("express");
+const BundleManifest = require("bundle-manifest");
 
-```json
-{
-  "type": "script",
-  "path": "dist/bundles/app/app.js",
-  "weight": 2
-}
+const manifest = new BundleManifest();
+
+app.get("/",
+	manifest.for("main").push,
+	function(req, res){
+		...
+	});
+
+app.get("/orders",
+	manifest.for("orders/").push,
+	function(req, res){
+		...
+	});
+
+spdy.createServer({
+	key: ...,
+	cert: ...,
+	protocols: ["h2", "http/1.1"]
+}, app).listen(8080);
 ```
-
-Assets is a subclass because it contains the `toHTML()` method that will generate the appropriate HTML.
 
 #### toHTML
 
@@ -158,7 +169,7 @@ This method generates HTML for assets. For scripts it creates `<script>` tags, f
 ```js
 var scripts = route.assets.filter(a => a.type === "script");
 
-scripts.toHTML(); // -> "<script src="/dist/bundles/app/app.js" async></script>
+route.toHTML(scripts); // -> "<script src="/dist/bundles/app/app.js" async></script>
 ```
 
 ## License

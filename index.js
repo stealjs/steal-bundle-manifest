@@ -3,14 +3,27 @@ const normalize = require("steal-fuzzy-normalize");
 const path = require("path");
 const StealPush = require("steal-push").StealPush;
 
+function isScript(asset) {
+	return asset.type === "script";
+}
+
 class Route {
 	constructor(assets, push, manifest) {
-		this.assets = Object.keys(assets).reduce(function(acc, key){
+		var assets = Object.keys(assets).reduce(function(acc, key){
 			let obj = Object.assign({ path: key }, assets[key]);
 			acc.push(obj);
 			return acc;
 		}, []);
 
+		assets.sort(function(a, b) {
+			if(isScript(a) && isScript(b)) {
+				return 1;
+			} else {
+				return -1;
+			}
+		});
+
+		this.assets = assets;
 		this.manifest = manifest;
 		this.push = push;
 	}

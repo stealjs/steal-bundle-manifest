@@ -22,6 +22,10 @@ describe("BundleManifest", function(){
 							"type": "script",
 							"weight": 2
 						},
+						"dist/bundles/app/puppies.js": {
+							"type": "script",
+							"weight": 2
+						},
 						"dist/bundles/app/app.css": {
 							"type": "style",
 							"weight": 1
@@ -54,11 +58,10 @@ describe("BundleManifest", function(){
 				assert.ok(this.route.assets instanceof Array, "It is an array");
 			});
 
-			it("filters to 1 script", function(){
-				debugger;
+			it("filters to 2 scripts", function(){
 				let route = this.route;
 				let scripts = route.assets.filter(a => a.type === "script");
-				assert.equal(scripts.length, 1);
+				assert.equal(scripts.length, 2);
 			});
 
 			it("filters to 2 styles", function(){
@@ -73,7 +76,7 @@ describe("BundleManifest", function(){
 				let html = route.toHTML(scripts);
 
 				assert.equal(html, `
-					<script src="/app/dist/bundles/app/app.js" async></script>
+					<script src="/app/dist/bundles/app/puppies.js" async></script><script src="/app/dist/bundles/app/app.js" async></script>
 				`.trim(), "correct scripts!");
 			});
 

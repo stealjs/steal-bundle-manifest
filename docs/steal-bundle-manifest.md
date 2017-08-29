@@ -1,4 +1,5 @@
-# steal-bundle-manifest
+@page steal-bundle-manifest
+@parent StealJS.ecosystem 
 
 [![Build Status](https://travis-ci.org/stealjs/steal-bundle-manifest.svg?branch=master)](https://travis-ci.org/stealjs/steal-bundle-manifest)
 [![npm version](https://badge.fury.io/js/steal-bundle-manifest.svg)](http://badge.fury.io/js/steal-bundle-manifest)

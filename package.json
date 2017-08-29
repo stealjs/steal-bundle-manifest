@@ -4,13 +4,15 @@
   "description": "Bundle manifest tools for steal",
   "main": "index.js",
   "scripts": {
+    "document": "node build-docs.js",
     "test": "mocha test/test.js",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "docs"
   ],
   "repository": {
     "type": "git",

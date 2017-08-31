@@ -63,23 +63,14 @@ npm install steal-bundle-manifest make-dir --save
 
 In addition to steal-bundle-manifest, we are also installing [make-dir](https://www.npmjs.com/package/make-dir), a library to let us recursively create directories.
 
-Now update your **build.js** script to look like:
+Create a new file **generate-snippets.js** and paste this code:
 
 ```js
-var stealTools = require("steal-tools");
 var BundleManifest = require("steal-bundle-manifest");
 var bundles = require("./package.json").steal.bundle;
 var fs = require("fs");
-var makeDir = require('make-dir');
 
-// use the defaults
-stealTools.optimize({}, {
-  bundleManifest: true
-})
-.then(() => {
-  return makeDir('dist/snippets');
-})
-.then(() => {
+module.exports = function(){
   var manifest = new BundleManifest();
 
   bundles.forEach(bundleName => {
@@ -93,9 +84,23 @@ stealTools.optimize({}, {
 
     var scripts = bundle.assets.filter(a => a.type === 'script');
     var scriptsHTML = bundle.toHTML(scripts);
-    fs.writeFile(`${fnprefix}-scripts.html`, scripts, () => {});
+    fs.writeFile(`${fnprefix}-scripts.html`, scriptsHTML, () => {});
   });
-});
+};
+```
+
+And update your **build.js** script to use it:
+
+```js
+var stealTools = require("steal-tools");
+var makeDir = require("make-dir");
+var generateSnippets = require("./generate-snippets");
+
+stealTools.optimize({}, {
+  bundleManifest: true
+})
+.then(() => makeDir("dist/snippets"))
+.then(generateSnippets);
 ```
 
 What this does is:
@@ -138,3 +143,5 @@ This example shows use in PHP, using the include statement.
   </body>
 </html>
 ```
+
+And that's it! Now every time you run your build you will also generate these snippets of HTML, so that every JavaScript bundle can load in parallel.
